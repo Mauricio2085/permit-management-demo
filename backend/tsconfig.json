@@ -7,13 +7,13 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "target": "es2022",
-    "types": [],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
+    "lib": ["esnext"],
+    "types": ["node"],
+    "esModuleInterop": true,
+    "allowJs": true,
 
     // Other Outputs
     "sourceMap": true,
@@ -42,13 +42,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": [
-    "src/**/*.ts", // Incluye todos los archivos .ts dentro de la carpeta src
-    "src/utils/hashPassword.js",
-    "types/**/*.d.ts" // Incluye todos los archivos de declaración de tipos
-  ],
-  "exclude": [
-    "node_modules", // Excluye la carpeta de librerías
-    "dist" // Excluye la carpeta de salida compilada para evitar bucles
-  ]
+  "include": ["src/**/*.ts", "src/**/*.js", "types/**/*.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }
