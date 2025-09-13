@@ -5,6 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "dev": "NODE_ENV=development nodemon --watch src --ext ts --exec \"tsc && node dist/index.js\"",
     "hash": "node --loader ts-node/esm ./src/utils/hashPassword.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
