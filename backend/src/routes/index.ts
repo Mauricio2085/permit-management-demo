@@ -2,6 +2,7 @@ import express from "express";
 import type { Application, NextFunction, Request, Response } from "express";
 import Boom from "@hapi/boom";
 import poolConnection from "../libs/postgres.pool.js";
+import authRouter from "../routes/auth.route.js";
 
 interface CriticalTaskResponse {
   id: number;
@@ -24,6 +25,8 @@ const router = express.Router();
 
 const routersApi = (app: Application) => {
   app.use("/api/v1", router);
+
+  router.use("/auth", authRouter);
 
   router.use("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
