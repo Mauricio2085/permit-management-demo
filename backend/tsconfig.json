@@ -11,7 +11,7 @@
     "moduleResolution": "NodeNext",
     "target": "es2022",
     "lib": ["esnext"],
-    "types": ["node"],
+    "types": ["node", "jest"],
     "esModuleInterop": true,
     "allowJs": true,
 
@@ -42,6 +42,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "src/**/*.js", "types/**/*.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.js", "types/**/*.d.ts", "test"],
   "exclude": ["node_modules", "dist"]
 }
