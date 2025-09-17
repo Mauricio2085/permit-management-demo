@@ -22,6 +22,14 @@ if (!customObjetEnv.DATABASE_URL) {
   throw Boom.internal("DATABASE_URL environment variable is not defined.");
 }
 
+if (
+  !customObjetEnv.CLOUDINARY_CLOUD_NAME ||
+  !customObjetEnv.CLOUDINARY_API_KEY ||
+  !customObjetEnv.CLOUDINARY_API_SECRET
+) {
+  throw new Error("Missing Cloudinary environment variables");
+}
+
 const config = {
   env: customObjetEnv.NODE_ENV || "development",
   port: customObjetEnv.PORT || 5000,

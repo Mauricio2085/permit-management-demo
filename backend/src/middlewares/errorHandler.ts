@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import Boom from "@hapi/boom";
 
-// Middleware para manejar errores de Boom
+// Boom errors
 export const boomErrorHandler = (
   err: any,
   req: Request,
@@ -12,18 +12,18 @@ export const boomErrorHandler = (
     const { output } = err;
     res.status(output.statusCode).json(output.payload);
   } else {
-    next(err); // Pasa el error a la siguiente capa si no es un error de Boom
+    next(err);
   }
 };
 
-// Middleware para manejar errores generales del servidor
+// Handler server general errors
 export const generalErrorHandler = (
   err: any,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  console.error(err); // Imprime el error para depuración
+  console.error(err);
   res.status(500).json({
     statusCode: 500,
     error: "Internal Server Error",
@@ -31,12 +31,12 @@ export const generalErrorHandler = (
   });
 };
 
-// Middleware para manejar errores 404 (Not Found)
+// Handler 404 errors (Not Found)
 export const notFoundHandler = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const error = Boom.notFound("Route not found"); // Crea un error 404 con Boom
-  next(error); // Pasa el error a los manejadores de errores
+  const error = Boom.notFound("Route not found");
+  next(error);
 };

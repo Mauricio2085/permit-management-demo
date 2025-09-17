@@ -1,26 +1,8 @@
 import express from "express";
-import type { Application, NextFunction, Request, Response } from "express";
-import Boom from "@hapi/boom";
-import poolConnection from "../libs/postgres.pool.js";
-import authRouter from "../routes/auth.route.js";
-import profileRouter from "../routes/profile.route.js";
-
-interface CriticalTaskResponse {
-  id: number;
-  name: string;
-}
-
-export const getCriticalTasks = async (): Promise<CriticalTaskResponse[]> => {
-  try {
-    const query = "SELECT * FROM critical_tasks_catalog";
-    const result = await poolConnection.query(query);
-    console.log("Resultado de la consulta:", result.rows);
-    const data = result.rows;
-    return data;
-  } catch (err) {
-    throw Boom.internal("Error al obtener las tareas críticas");
-  }
-};
+import type { Application, Request, Response } from "express";
+import authRouter from "./auth.route.js";
+import profileRouter from "./profile.route.js";
+import workAtHeightsRouter from "./workAtHeights.route.js";
 
 const router = express.Router();
 
@@ -29,16 +11,9 @@ const routersApi = (app: Application) => {
 
   router.use("/auth", authRouter);
   router.use("/profile", profileRouter);
-  router.use("/", async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const result = await getCriticalTasks();
-      res.status(200).json({
-        message: "Critical tasks fetched successfully",
-        data: result,
-      });
-    } catch (error) {
-      next(error);
-    }
+  router.use("/work-at-heights", workAtHeightsRouter);
+  router.use("/", (req: Request, res: Response) => {
+    res.send("Root");
   });
 };
 
