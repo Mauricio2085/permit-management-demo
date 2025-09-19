@@ -620,10 +620,21 @@ customers c ON cp.customer_id = c.id WHERE wahp.status='finalizado';`;
 export const getPendingCompletePermissions = async (
   permissionId: number
 ): Promise<CompletePermissionsResponse[]> => {
+  if (!permissionId) {
+    throw Boom.badRequest("Permission ID is required");
+  }
+
   const client = await poolConection.connect();
+
+  const checkPermitQuery = `SELECT * FROM work_at_heights_permits WHERE id = $1;`;
+  const checkResult = await client.query(checkPermitQuery, [permissionId]);
+
+  if (!checkResult.rows || checkResult.rows.length === 0) {
+    throw Boom.notFound(`Permit with ID ${permissionId} not found`);
+  }
   try {
     await client.query("BEGIN");
-    console.log("Getting permission data:");
+    console.log("Getting permission data for ID:", permissionId);
 
     const permissionQuery = `SELECT * FROM work_at_heights_permits WHERE id= $1;`;
     const customerQuery = `SELECT c.name AS customer 
