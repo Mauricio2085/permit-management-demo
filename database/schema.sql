@@ -80,7 +80,7 @@ CREATE TABLE documents_permit (
 -- Signatures
 CREATE TABLE permit_signatures (
   id SERIAL PRIMARY KEY,
-  permit_id INT REFERENCES work_at_heights_permits(id),
+  permit_id INT REFERENCES work_at_heights_permits(id) ON DELETE CASCADE,
   name VARCHAR(100),
   identification VARCHAR(30),
   role VARCHAR(50),
@@ -114,7 +114,7 @@ CREATE TABLE safety_equipment_catalog (
 -- Safety equipment required for a permit
 CREATE TABLE permit_equipment (
   id SERIAL PRIMARY KEY,
-  permit_id INT REFERENCES work_at_heights_permits(id),
+  permit_id INT REFERENCES work_at_heights_permits(id) ON DELETE CASCADE,
   equipment_id INT REFERENCES safety_equipment_catalog(id),
   applies BOOLEAN DEFAULT FALSE
 );

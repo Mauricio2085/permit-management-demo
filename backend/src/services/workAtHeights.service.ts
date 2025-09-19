@@ -736,8 +736,8 @@ export const getPendingCompletePermissions = async (
     ];
   } catch (error) {
     await client.query("ROLLBACK");
-    console.error("Error creating permit:", error);
-    throw Boom.internal("Error creating permit, operation is rolled back.");
+    console.error("Error getting permit:", error);
+    throw Boom.internal("Error getting permit, operation is rolled back.");
   } finally {
     console.log("Releasing connection.");
     await client.release();
@@ -759,8 +759,8 @@ export const deletePermission = async (sequence: Sequence) => {
   const client = await poolConection.connect();
   try {
     await client.query("BEGIN");
-    const queryGetId = `SELECT id FROM work_at_heights WHERE sequence = $1`;
-    const deletePermissionQuery = `DELETE FROM work_at_heights WHERE id = $1`;
+    const queryGetId = `SELECT id FROM work_at_heights_permits WHERE sequence = $1`;
+    const deletePermissionQuery = `DELETE FROM work_at_heights_permits WHERE id = $1`;
     console.log("Sequence: ", sequence);
     const getIdResult = await client.query(queryGetId, [sequence]);
     const getIdData = getIdResult.rows;
