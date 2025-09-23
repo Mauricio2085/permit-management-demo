@@ -36,7 +36,7 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
                 }
               }
             }}
-            className="w-full bg-red-600 text-white font-medium px-4 py-2 rounded-md hover:bg-red-700 transition-colors duration-200"
+            className="w-full bg-gradient-to-r from-orange-600 to-orange-700 text-white font-medium px-4 py-2 rounded-md hover:from-orange-700 hover:to-orange-800 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
           >
             Aceptar
           </button>

@@ -2,30 +2,30 @@ import type { Dispatch, SetStateAction } from "react";
 
 interface Providers {
   id: number;
-  nombre: string;
-  nit: string;
-  telefono: number;
-  correo: string;
-  direccion: string;
+  name: string;
+  tax_id: string;
+  phone: number;
+  email: string;
+  address: string;
 }
 export interface ProvidersResponse {
   data: Providers[];
 }
 
-export interface ConsecutiveResponse {
+export interface SequenceResponse {
   data: number;
 }
 
 export interface CriticalTask {
   id: number;
-  nombre: string;
+  name: string;
 }
 export interface CriticalTaskResponse {
   data: CriticalTask[];
 }
 export interface DocumentSupport {
   id: number;
-  nombre: string;
+  name: string;
 }
 export interface DocumentSupportResponse {
   data: DocumentSupport[];
@@ -33,8 +33,8 @@ export interface DocumentSupportResponse {
 
 export interface ProtectionElements {
   id: number;
-  nombre: string;
-  tipo: string;
+  name: string;
+  type: string;
 }
 export interface ProtectionElementsResponse {
   data: ProtectionElements[];
