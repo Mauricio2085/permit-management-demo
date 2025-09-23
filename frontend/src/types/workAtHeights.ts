@@ -86,7 +86,7 @@ export interface PermissionsResponse {
 
 export interface PermissionDownload {
   id: number;
-  consecutive: number;
+  sequence: number;
   permissionStartDate: string;
   permissionEndDate: string;
   description: string;
@@ -94,9 +94,9 @@ export interface PermissionDownload {
   customer: string;
   criticalTasks: string[];
   documentsSupport: {
-    id_documento: number;
-    nombre: string;
-    respuesta: string;
+    document_id: number;
+    name: string;
+    response: string;
   }[];
   maxHeightAuthorized: string;
   maxLoadAuthorized: string;
@@ -105,15 +105,15 @@ export interface PermissionDownload {
   accessElements: string[];
   answersCheckPermission: {
     id: number;
-    verificacion: string;
-    aspecto: string;
-    respuesta: string;
+    verification: string;
+    aspect: string;
+    response: string;
   }[];
   signaturesPermission: {
-    nombre: string;
-    cedula: string;
-    rol: string;
-    firma: string;
+    name: string;
+    identification: string;
+    role: string;
+    signature: string;
   }[];
 }
 export interface PermissionDownloadResponse {
