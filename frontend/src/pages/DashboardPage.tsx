@@ -1,5 +1,6 @@
 import { useNavigate, Link } from "react-router";
 import { useState } from "react";
+import axios from "axios";
 import {
   CheckCircle2,
   Search,
@@ -14,11 +15,29 @@ import { Loading } from "@/components/Loading";
 import { useFetch } from "@/hooks/useFetch";
 import ErrorModal from "@/components/ErrorModal";
 import { useAuth } from "@/contexts/AuthContext";
+import SuccessModal from "@/components/PermitSuccessModal";
+import { EliminatePermissionModal } from "@/components/EliminatePermissionModal";
+import { ClosePermissionModal } from "@/components/ClosePermissionModal";
+
+type SuccessTypes = "created" | "closed" | "deleted";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const [search, setSearch] = useState("");
+  const [isCloseCloseModalOpen, setIsCloseCloseModalOpen] =
+    useState<boolean>(false);
+  const [isCloseEliminateModalOpen, setIsCloseEliminateModalOpen] =
+    useState<boolean>(false);
+  const [currentPermissionSequence, setCurrentPermissionSequence] = useState<
+    number | null
+  >(null);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
+  useState<number | null>(null);
+  const [typeSuccess, setTypeSuccess] = useState<SuccessTypes>("closed");
+  const [reloadKey, setReloadKey] = useState(0);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const URL_API = "http://localhost:5000/api/v1";
 
@@ -28,7 +47,7 @@ const Dashboard = () => {
     error: errorPendingPermissions,
   } = useFetch<PermissionsResponse>(
     `${URL_API}/work-at-heights/pending-permissions-resume`,
-    []
+    [reloadKey]
   );
 
   const {
@@ -37,7 +56,7 @@ const Dashboard = () => {
     error: errorFinishedPermissions,
   } = useFetch<PermissionsResponse>(
     `${URL_API}/work-at-heights/finished-permissions-resume`,
-    []
+    [reloadKey]
   );
 
   if (loadingPendingPermissions) return <Loading />;
@@ -62,7 +81,61 @@ const Dashboard = () => {
     navigate("./permit");
   };
 
-  // Filtrar permisos basado en la búsqueda
+  const handleOpenCloseCloseModal = (sequence: number) => {
+    setCurrentPermissionSequence(sequence);
+    setIsCloseCloseModalOpen(true);
+  };
+
+  const handleOpenCloseEliminateModal = (sequence: number) => {
+    setCurrentPermissionSequence(sequence);
+    setIsCloseEliminateModalOpen(true);
+  };
+
+  const handleConfirmClose = async () => {
+    console.log(`Cerrando permiso con ID: ${currentPermissionSequence}`);
+    try {
+      await axios.put(`${URL_API}/work-at-heights/permission`, {
+        sequence: currentPermissionSequence,
+      });
+      setIsCloseCloseModalOpen(false);
+      setCurrentPermissionSequence(null);
+      setTypeSuccess("closed");
+      setIsSuccessModalOpen(true);
+      setReloadKey((prev) => prev + 1);
+    } catch (error) {
+      console.error("Error al cerrar el permiso", error);
+      setErrorMessage(
+        "Error al cerrar el permiso. Por favor, inténtalo de nuevo."
+      );
+      setIsErrorModalOpen(true);
+    }
+  };
+
+  const handleConfirmEliminate = async () => {
+    console.log(`Eliminando permiso con ID: ${currentPermissionSequence}`);
+    try {
+      await axios.delete(`${URL_API}/work-at-heights/permission`, {
+        data: { sequence: currentPermissionSequence },
+      });
+      setIsCloseEliminateModalOpen(false);
+      setCurrentPermissionSequence(null);
+      setTypeSuccess("deleted");
+      setIsSuccessModalOpen(true);
+      setReloadKey((prev) => prev + 1);
+    } catch (error) {
+      console.error("Error al eliminar el permiso", error);
+      setErrorMessage(
+        "Error al eliminar el permiso. Por favor, inténtalo de nuevo."
+      );
+      setIsErrorModalOpen(true);
+    }
+  };
+
+  const handleSuccessModalClose = () => {
+    setIsSuccessModalOpen(false);
+  };
+
+  // Filter permits based on search
   const filteredPendingPermissions = pendingPermissionsLoaded.filter(
     (permit) =>
       permit.sequence.toString().includes(search) ||
@@ -165,7 +238,7 @@ const Dashboard = () => {
                 </button>
               </div>
 
-              {/* Búsqueda mejorada */}
+              {/* Searching */}
               <div className="w-full lg:w-80">
                 <label
                   htmlFor="search"
@@ -194,7 +267,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Tabla de permisos pendientes */}
+        {/* Pending permits table */}
         <div className="mb-8">
           <div className="w-full md:w-fit justify-between flex items-center space-x-3 mb-6">
             <div className="w-8 h-8 bg-sst-yellow/20 rounded-lg flex items-center justify-center">
@@ -266,7 +339,9 @@ const Dashboard = () => {
                             </Link>
 
                             <button
-                              onClick={() => console.log("Finalizar permiso")}
+                              onClick={() => {
+                                handleOpenCloseCloseModal(permit.sequence);
+                              }}
                               className="inline-flex items-center px-3 py-2 text-sm font-medium text-sst-green hover:text-green-700 hover:bg-sst-green/10 rounded-lg transition-colors"
                               title="Finalizar permiso"
                             >
@@ -275,7 +350,9 @@ const Dashboard = () => {
                             </button>
 
                             <button
-                              onClick={() => console.log("Eliminar permiso")}
+                              onClick={() =>
+                                handleOpenCloseEliminateModal(permit.sequence)
+                              }
                               className="inline-flex items-center px-3 py-2 text-sm font-medium text-sst-red hover:text-red-700 hover:bg-sst-red/10 rounded-lg transition-colors"
                               title="Eliminar permiso"
                             >
@@ -303,7 +380,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Tabla de permisos finalizados */}
+        {/* Completed permits table */}
         <div className="mb-12">
           <div className="w-full md:w-fit justify-between flex items-center space-x-3 mb-6">
             <div className="w-8 h-8 bg-sst-green/20 rounded-lg flex items-center justify-center">
@@ -394,6 +471,32 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      {/* Modal de cierre de permisos */}
+      <ClosePermissionModal
+        isOpen={isCloseCloseModalOpen}
+        onClose={setIsCloseCloseModalOpen}
+        onConfirm={handleConfirmClose}
+        permissionSequence={currentPermissionSequence || "N/A"}
+      />
+      {/* Modal de eliminación de permisos */}
+      <EliminatePermissionModal
+        isOpen={isCloseEliminateModalOpen}
+        onClose={setIsCloseEliminateModalOpen}
+        onConfirm={handleConfirmEliminate}
+        permissionSequence={currentPermissionSequence || "N/A"}
+      />
+      {/* Modal de cierre o eliminación de permisos exitoso */}
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={handleSuccessModalClose}
+        type={typeSuccess}
+      />
+      {/* Modal de error */}
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        onClose={setIsErrorModalOpen}
+        message={errorMessage}
+      />
     </div>
   );
 };

@@ -123,5 +123,5 @@ export interface CloseEliminateModalProps {
   isOpen: boolean;
   onClose: Dispatch<SetStateAction<boolean>>;
   onConfirm: () => void;
-  permissionConsecutive: number | string;
+  permissionSequence: number | string;
 }

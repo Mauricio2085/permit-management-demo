@@ -57,9 +57,9 @@ const inputsPermission: InputsPermissionResponse = {
   ],
   accessElements: [{ value: "Extintores" }, { value: "Andamios" }],
   //Dates
-  permissionElaborationDate: "2023-10-27T17:00:00.000Z",
-  permissionStartDate: "2023-10-27T17:00:00.000Z",
-  permissionEndDate: "2023-10-27T17:00:00.000Z",
+  permissionElaborationDate: "2025-08-27T17:00:00.000Z",
+  permissionStartDate: "2025-08-27T17:00:00.000Z",
+  permissionEndDate: "2025-08-27T17:00:00.000Z",
   //Checklist
   siteIsolated: "SI",
   barriersInstalled: "SI",
@@ -73,15 +73,18 @@ const inputsPermission: InputsPermissionResponse = {
     {
       name: "Jhonny Zapata",
       identification: "14567896",
-      signature: null,
+      signature:
+        "https://res.cloudinary.com/smartpocket/image/upload/v1754700867/signatures/signature_43645645_1754700867267.png",
     },
   ],
   authorizerName: "Autorizador 1",
   authorizerId: "34567812",
-  authorizerSignature: null,
+  authorizerSignature:
+    "https://res.cloudinary.com/smartpocket/image/upload/v1754700867/signatures/signature_43645645_1754700867267.png",
   coordinatorName: "Juan García",
   coordinatorId: "1088262478",
-  coordinatorSignature: null,
+  coordinatorSignature:
+    "https://res.cloudinary.com/smartpocket/image/upload/v1754700867/signatures/signature_43645645_1754700867267.png",
 };
 const URL_API = "http://localhost:5000/api/v1";
 
