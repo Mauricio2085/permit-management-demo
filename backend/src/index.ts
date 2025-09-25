@@ -13,9 +13,11 @@ import {
 const port = config.port;
 const nodeEnv = config.env;
 const app: Application = express();
-const urlProduction = "http://localhost:5173";
-const urllocal = "http://127.0.0.1:5173";
-const urlList = [urlProduction, urllocal];
+const urlProduction = "https://permit-management-demo.vercel.app";
+const urllocal1 = "http://127.0.0.1:5173";
+const urllocal2 = "http://localhost:5173";
+const urlList =
+  nodeEnv === "production" ? [urlProduction] : [urllocal1, urllocal2];
 
 const corsOptions: CorsOptions = {
   origin: function (origin, callback) {
