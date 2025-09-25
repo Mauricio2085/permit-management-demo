@@ -4,7 +4,6 @@ import { useFetch } from "@/hooks/useFetch";
 import type { PermissionDownloadResponse } from "@/types/workAtHeights";
 import { Loading } from "@/components/Loading";
 import ErrorModal from "@/components/ErrorModal";
-import logo from "../assets/shield.svg";
 import { PermissionDownloadPdfButton } from "@/components/PermissionDownloadPdfButton";
 
 type ResponseType = "SI" | "NO" | "NA";
@@ -430,7 +429,7 @@ const PendingPermit = () => {
             PERMISO DE TRABAJO EN ALTURAS
           </p>
           <div className="text-center flex justify-center items-center mx-2">
-            <img src={logo} alt="Logo Empresa" className="w-8 h-8" />
+            <img src={"/shield.svg"} alt="Logo Empresa" className="w-8 h-8" />
           </div>
         </div>
 
@@ -466,7 +465,11 @@ const PendingPermit = () => {
       <div className="hidden md:block w-[280mm] min-h-[297mm] bg-white py-[20mm] px-[5mm] shadow-md rounded-md text-[#333] font-inter mx-auto">
         <header className="flex justify-between items-center mb-4 border border-black p-2 rounded">
           <div className="w-1/4 flex justify-center">
-            <img src={logo} alt="Logo de la Empresa" className="w-10 h-10" />
+            <img
+              src={"/shield.svg"}
+              alt="Logo de la Empresa"
+              className="w-10 h-10"
+            />
           </div>
           <div className="text-center w-1/2">
             <div className="text-lg font-bold">NOMBRE EMPRESA</div>

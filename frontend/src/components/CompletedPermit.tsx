@@ -5,7 +5,6 @@ import { PermissionDownloadPdfButton } from "@/components/PermissionDownloadPdfB
 import type { PermissionDownloadResponse } from "@/types/workAtHeights";
 import { Loading } from "@/components/Loading";
 import ErrorModal from "@/components/ErrorModal";
-import logo from "../assets/shield.svg";
 
 type ResponseType = "SI" | "NO" | "NA";
 
@@ -486,7 +485,7 @@ const CompletedPermit = () => {
             PERMISO DE TRABAJO EN ALTURAS
           </p>
           <div className="text-center flex justify-center items-center mx-2">
-            <img src={logo} alt="Logo empresa" className="w-8 h-8" />
+            <img src={"/shield.svg"} alt="Logo empresa" className="w-8 h-8" />
           </div>
         </div>
 
@@ -522,7 +521,11 @@ const CompletedPermit = () => {
         <header className="flex justify-between items-center mb-4 border border-black p-2 rounded">
           {/* Left: Company Logo */}
           <div className="w-1/4 flex justify-center">
-            <img src={logo} alt="Logo de la Empresa" className="w-10 h-10" />
+            <img
+              src={"/shield.svg"}
+              alt="Logo de la Empresa"
+              className="w-10 h-10"
+            />
           </div>
 
           {/* Center: Company Name and Title */}

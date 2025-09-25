@@ -8,7 +8,6 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import type { PermissionDownloadResponse } from "@/types/workAtHeights";
-import logo from "../assets/shield.png";
 
 // Estilos para PDF
 const styles = StyleSheet.create({
@@ -563,7 +562,7 @@ const CompletedPermissionPdfDocument: React.FC<PdfDocumentProps> = ({
         {/* Header */}
         <View style={styles["header"]}>
           <View style={styles["logoContainer"]}>
-            <Image style={styles["logo"]} src={logo} />
+            <Image style={styles["logo"]} src={"/shield.png"} />
           </View>
           <View style={styles["headerTitleContainer"]}>
             <Text style={styles["headerTitle"]}>NOMBRE EMPRESA</Text>
