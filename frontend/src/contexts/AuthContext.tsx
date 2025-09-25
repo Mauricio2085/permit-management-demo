@@ -65,7 +65,9 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           "Error de autenticación",
           error.response?.data || error.message
         );
+        throw error;
       }
+      throw error;
     }
   };
 

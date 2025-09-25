@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { useState } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useAuth } from "../contexts/AuthContext";
+import { AxiosError } from "axios";
 
 type Inputs = {
   email: string;
@@ -20,19 +21,25 @@ const LoginForm = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [loginError, setLoginError] = useState<string | null>(null);
+  const [loginError, setLoginError] = useState<string>("");
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      setLoginError(null);
+      setLoginError("");
       console.log(data);
       await login(data);
       navigate("/admin");
     } catch (error) {
       console.log(error);
-      setLoginError(
-        "Invalid credentials. Please verify your email and password."
-      );
+      if (error instanceof AxiosError) {
+        setLoginError(
+          error.response?.data?.message ||
+            error.response?.data ||
+            "Error trying to log in. Please verify your credentials."
+        );
+      } else {
+        setLoginError("Unexpected error during login.");
+      }
     }
   };
 
@@ -255,6 +262,7 @@ const LoginForm = () => {
 
           {/* Botón de acceso */}
           <button
+            aria-label="login"
             type="submit"
             disabled={isSubmitting}
             className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
