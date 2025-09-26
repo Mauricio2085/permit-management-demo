@@ -18,6 +18,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import SuccessModal from "@/components/PermitSuccessModal";
 import { EliminatePermissionModal } from "@/components/EliminatePermissionModal";
 import { ClosePermissionModal } from "@/components/ClosePermissionModal";
+import { URL_API } from "../../config/api";
 
 type SuccessTypes = "created" | "closed" | "deleted";
 
@@ -38,8 +39,6 @@ const Dashboard = () => {
   const [reloadKey, setReloadKey] = useState(0);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-
-  const URL_API = "http://localhost:5000/api/v1";
 
   const {
     data: pendingPermissions,

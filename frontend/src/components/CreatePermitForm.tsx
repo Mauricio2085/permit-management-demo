@@ -28,6 +28,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import workHeightsSchema from "@/lib/workHeightsSchema";
 import SuccessModal from "@/components/PermitSuccessModal";
 import { useNavigate } from "react-router";
+import { URL_API } from "../../config/api";
 
 const schema = workHeightsSchema;
 
@@ -136,9 +137,6 @@ const CreatePermitForm = () => {
   );
   const authorizerSigCanvas = useRef<SignatureCanvas | null>(null);
   const coordinatorSigCanvas = useRef<SignatureCanvas | null>(null);
-
-  //  Data fetching
-  const URL_API = "http://localhost:5000/api/v1";
 
   const {
     data: consecutive,

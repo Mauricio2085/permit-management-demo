@@ -5,13 +5,13 @@ import type { PermissionDownloadResponse } from "@/types/workAtHeights";
 import { Loading } from "@/components/Loading";
 import ErrorModal from "@/components/ErrorModal";
 import { PermissionDownloadPdfButton } from "@/components/PermissionDownloadPdfButton";
+import { URL_API } from "../../config/api";
 
 type ResponseType = "SI" | "NO" | "NA";
 
 const PendingPermit = () => {
   let { permissionId } = useParams();
   const [activeTab, setActiveTab] = useState("general");
-  const URL_API = "http://localhost:5000/api/v1";
 
   const {
     data: pendingPermissionToDownload,
