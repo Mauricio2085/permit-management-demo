@@ -209,7 +209,7 @@ const CreatePermitForm = () => {
 
   const handleSuccessModalClose = () => {
     setIsModalOpen(false);
-    navigate("../sst/alturas");
+    navigate(`/admin?t=${Date.now()}`, { replace: true });
   };
 
   if (

@@ -1,5 +1,5 @@
-import { useNavigate, Link } from "react-router";
-import { useState } from "react";
+import { useNavigate, Link, useSearchParams } from "react-router";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import {
   CheckCircle2,
@@ -26,6 +26,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const [search, setSearch] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isCloseCloseModalOpen, setIsCloseCloseModalOpen] =
     useState<boolean>(false);
   const [isCloseEliminateModalOpen, setIsCloseEliminateModalOpen] =
@@ -39,6 +40,18 @@ const Dashboard = () => {
   const [reloadKey, setReloadKey] = useState(0);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  useEffect(() => {
+    const timestampParam = searchParams.get("t");
+    if (timestampParam) {
+      // Actualizar reloadKey para trigger useFetch
+      setReloadKey((prev) => prev + 1);
+
+      // Limpiar el timestamp de la URL para mantenerla limpia
+      searchParams.delete("t");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const {
     data: pendingPermissions,
