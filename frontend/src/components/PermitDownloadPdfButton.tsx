@@ -1,7 +1,7 @@
 // Componente para descargar
 import type { PermissionDownloadResponse } from "@/types/workAtHeights";
-import { CompletedPermissionPdfDocument } from "@/components/CompletedPermissionPdfDocument";
-import { PendingPermissionPdfDocument } from "@/components/PendingPermissionPdfDocument";
+import { CompletedPermissionPdfDocument } from "@/components/CompletedPermitPdfDocument";
+import { PendingPermissionPdfDocument } from "@/components/PendingPermitPdfDocument";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Download } from "lucide-react";
 
@@ -25,7 +25,9 @@ const PermissionDownloadPdfButton: React.FC<PdfDocumentProps> = ({
           <PendingPermissionPdfDocument data={data} />
         )
       }
-      fileName={`permiso-trabajo-alturas-pendiente-id=${data.id}`}
+      fileName={`permiso-trabajo-alturas-${
+        type === "complete" ? "completado" : "pendiente"
+      }-id=${data.id}`}
       className="w-fit flex p-1 mb-4 items-center bg-gradient-to-r from-orange-600 to-orange-700 text-white font-medium rounded-lg hover:from-orange-700 hover:to-orange-800 transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
     >
       {({ loading }) =>

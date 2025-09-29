@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   signaturesContainer: {
     border: "1px solid black",
     padding: 5,
-    marginBottom: 10,
+    marginBottom: 5,
   },
   signaturesGrid: {
     flexDirection: "row",
@@ -290,6 +290,7 @@ const styles = StyleSheet.create({
   signatureName: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     marginBottom: 5,
   },
   signatureNameLabel: {
@@ -368,14 +369,86 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  closingContainer: {
+    border: "1px solid black",
+    padding: "4px",
+    marginBottom: 16,
+  },
+
+  closingTitle: {
+    fontWeight: "bold",
+    marginBottom: "8px",
+    textAlign: "center",
+    fontSize: "10px",
+  },
+
+  closingText: {
+    fontSize: 8,
+    marginBottom: "4px",
+  },
+
+  closingSignaturesContainer: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    marginBottom: 8,
+    paddingTop: 10,
+  },
+
+  closingSignatureSection: {
+    width: "50%",
+    paddingRight: 10,
+  },
+
+  closingSignatureRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+    width: "100%",
+  },
+
+  closingSignatureLabel: {
+    fontWeight: "bold",
+    width: "40%",
+    fontSize: 9,
+    wordWrap: "normal",
+    textOverflow: "ellipsis",
+    textAlign: "right",
+  },
+
+  closingSignatureImageContainer: {
+    borderBottom: "1px solid black",
+    marginLeft: 8,
+    flexGrow: 1,
+    width: 150,
+    height: "55px",
+    padding: 2,
+  },
+
+  closingSignatureImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  },
+
+  closingSignatureValue: {
+    borderBottom: "1px solid black",
+    marginLeft: 8,
+    flexGrow: 1,
+    width: 150,
+    textAlign: "center",
+    fontSize: "10px",
+    paddingBottom: 2,
+  },
 });
 
 interface PdfDocumentProps {
   data: PermissionDownloadResponse["data"][0];
 }
 
-const PendingPermissionPdfDocument: React.FC<PdfDocumentProps> = ({ data }) => {
-  console.log("Critical tasks: ", data.criticalTasks);
+const CompletedPermissionPdfDocument: React.FC<PdfDocumentProps> = ({
+  data,
+}) => {
   const documentsSupportWithAnswers = data.documentsSupport;
   const itemsCheckWithAnswers = data.answersCheckPermission;
   const signaturesExecutorsPermission = data.signaturesPermission.filter(
@@ -409,7 +482,7 @@ const PendingPermissionPdfDocument: React.FC<PdfDocumentProps> = ({ data }) => {
       );
     }
     return (
-      <React.Fragment key={document.nombre}>
+      <React.Fragment key={document.name}>
         <View
           style={[
             styles["tableCell"],
@@ -426,11 +499,11 @@ const PendingPermissionPdfDocument: React.FC<PdfDocumentProps> = ({ data }) => {
               textAlign: "left",
             }}
           >
-            {document.nombre}
+            {document.name}
           </Text>
         </View>
         <View style={styles["tableCellCheck"]}>
-          <Text>{document.respuesta === "SI" ? "X" : ""}</Text>
+          <Text>{document.response === "SI" ? "X" : ""}</Text>
         </View>
         <View
           style={[
@@ -441,12 +514,12 @@ const PendingPermissionPdfDocument: React.FC<PdfDocumentProps> = ({ data }) => {
             },
           ]}
         >
-          <Text>{document.respuesta === "NO" ? "X" : ""}</Text>
+          <Text>{document.response === "NO" ? "X" : ""}</Text>
         </View>
         <View
           style={[styles["tableCellCheck"], { borderRight: "1px solid black" }]}
         >
-          <Text>{document.respuesta === "NA" ? "X" : ""}</Text>
+          <Text>{document.response === "NA" ? "X" : ""}</Text>
         </View>
       </React.Fragment>
     );
@@ -457,13 +530,13 @@ const PendingPermissionPdfDocument: React.FC<PdfDocumentProps> = ({ data }) => {
     return (
       <View style={styles["tableRow"]} key={rowIndex}>
         <View style={{ width: "45%", borderRight: "1px solid black" }}>
-          <Text style={styles["tableCell"]}>{item.verificacion}</Text>
+          <Text style={styles["tableCell"]}>{item.verification}</Text>
         </View>
         <View style={{ width: "45%", borderRight: "1px solid black" }}>
-          <Text style={[styles["tableCell"]]}>{item.aspecto}</Text>
+          <Text style={[styles["tableCell"]]}>{item.aspect}</Text>
         </View>
         <View style={styles["tableCellCheck"]}>
-          <Text>{item.respuesta === "SI" ? "X" : ""}</Text>
+          <Text>{item.response === "SI" ? "X" : ""}</Text>
         </View>
         <View
           style={[
@@ -471,12 +544,12 @@ const PendingPermissionPdfDocument: React.FC<PdfDocumentProps> = ({ data }) => {
             { borderLeft: "1px solid black", borderRight: "1px solid black" },
           ]}
         >
-          <Text>{item.respuesta === "NO" ? "X" : ""}</Text>
+          <Text>{item.response === "NO" ? "X" : ""}</Text>
         </View>
         <View
           style={[styles["tableCellCheck"], { borderRight: "1px solid black" }]}
         >
-          <Text>{item.respuesta === "NA" ? "X" : ""}</Text>
+          <Text>{item.response === "NA" ? "X" : ""}</Text>
         </View>
       </View>
     );
@@ -1691,161 +1764,442 @@ const PendingPermissionPdfDocument: React.FC<PdfDocumentProps> = ({ data }) => {
           </View>
         </View>
       </Page>
-      <Page style={styles["page"]}>
-        {/* Checklist */}
-        <View style={[styles["table"], { marginBottom: 5 }]}>
-          <Text style={styles["tableHeader"]}>
-            LISTA DE CHEQUEO PARA PERMISO DE TRABAJO EN ALTURAS
+      {signaturesExecutorsPermission.length <= 2 && (
+        <Page style={styles["page"]}>
+          {/* Checklist */}
+          <View style={[styles["table"], { marginBottom: 5 }]}>
+            <Text style={styles["tableHeader"]}>
+              LISTA DE CHEQUEO PARA PERMISO DE TRABAJO EN ALTURAS
+            </Text>
+            <View style={styles["tableRowHeader"]}>
+              <Text style={[styles["tableHeaderCell"], { width: "45%" }]}>
+                VERIFICACION IMPLEMENTACION
+              </Text>
+              <Text style={[styles["tableHeaderCellAspect"], { width: "45%" }]}>
+                ASPECTO A TENER EN CUENTA
+              </Text>
+              <Text style={[styles["tableHeaderCell"], { width: "6%" }]}>
+                SI
+              </Text>
+              <Text
+                style={[
+                  styles["tableHeaderCellIntermediateNo"],
+                  { width: "6%" },
+                ]}
+              >
+                NO
+              </Text>
+              <Text style={[styles["tableHeaderCell"], { width: "6%" }]}>
+                N/A
+              </Text>
+            </View>
+            {itemsCheckWithAnswers.map(renderChecklistRow)}
+          </View>
+          {/* Datos del Ejecutor y/o Ejecutores */}
+          <Text style={styles["executorsTitle"]}>
+            DATOS DEL EJECUTOR Y/O EJECUTORES
           </Text>
-          <View style={styles["tableRowHeader"]}>
-            <Text style={[styles["tableHeaderCell"], { width: "45%" }]}>
-              VERIFICACION IMPLEMENTACION
-            </Text>
-            <Text style={[styles["tableHeaderCellAspect"], { width: "45%" }]}>
-              ASPECTO A TENER EN CUENTA
-            </Text>
-            <Text style={[styles["tableHeaderCell"], { width: "6%" }]}>SI</Text>
-            <Text
-              style={[styles["tableHeaderCellIntermediateNo"], { width: "6%" }]}
-            >
-              NO
-            </Text>
-            <Text style={[styles["tableHeaderCell"], { width: "6%" }]}>
-              N/A
-            </Text>
-          </View>
-          {itemsCheckWithAnswers.map(renderChecklistRow)}
-        </View>
-
-        {/* Datos del Ejecutor y/o Ejecutores */}
-        <Text style={styles["executorsTitle"]}>
-          DATOS DEL EJECUTOR Y/O EJECUTORES
-        </Text>
-        <Text style={styles["executorsText"]}>
-          He entendido claramente el alcance y riesgos del trabajo y lo
-          realizaré con todas las medidas de seguridad para realizar un trabajo
-          seguro en altura. Manifiesto que estoy en óptimas condiciones de salud
-          para desempeñar el trabajo en alturas.
-        </Text>
-        <View style={styles["executorsTable"]}>
-          <View style={styles["tableRow"]}>
-            <Text
-              style={[styles["executorsTableHeaderCell"], { width: "35%" }]}
-            >
-              NOMBRE
-            </Text>
-            <Text
-              style={[styles["executorsTableHeaderCell"], { width: "35%" }]}
-            >
-              C.C. N°
-            </Text>
-            <Text
-              style={[styles["executorsTableHeaderCell"], { width: "30%" }]}
-            >
-              FIRMA
-            </Text>
-          </View>
-          {signaturesExecutorsPermission.map((executor, index) => (
-            <View style={styles["tableRow"]} key={index}>
+          <Text style={styles["executorsText"]}>
+            He entendido claramente el alcance y riesgos del trabajo y lo
+            realizaré con todas las medidas de seguridad para realizar un
+            trabajo seguro en altura. Manifiesto que estoy en óptimas
+            condiciones de salud para desempeñar el trabajo en alturas.
+          </Text>
+          <View style={styles["executorsTable"]}>
+            <View style={styles["tableRow"]}>
               <Text
-                style={[
-                  styles["executorsTableCell"],
-                  { width: "35%", textAlign: "center" },
-                ]}
+                style={[styles["executorsTableHeaderCell"], { width: "35%" }]}
               >
-                {executor.name}
+                NOMBRE
               </Text>
               <Text
-                style={[
-                  styles["executorsTableCell"],
-                  { width: "35%", textAlign: "center" },
-                ]}
+                style={[styles["executorsTableHeaderCell"], { width: "35%" }]}
               >
-                {executor.identification}
+                C.C. N°
               </Text>
-              <View
-                style={[styles["executorsSignatureCell"], { width: "30%" }]}
+              <Text
+                style={[styles["executorsTableHeaderCell"], { width: "30%" }]}
               >
-                <Image
-                  src={executor.signature}
-                  style={styles["executorsSignatureImage"]}
-                />
-              </View>
+                FIRMA
+              </Text>
             </View>
-          ))}
-        </View>
-
-        {/* Aprobación y Refrendación del Permiso */}
-        <View style={styles["signaturesContainer"]}>
-          <View style={styles["signaturesGrid"]}>
-            <View style={styles["signatureBox"]}>
-              <Text style={styles["signatureHeader"]}>
-                DATOS DEL AUTORIZANTE
-              </Text>
-              <Text style={styles["signatureText"]}>
-                He verificado las condiciones de seguridad y doy aprobación para
-                ejecutar el trabajo seguro en alturas
-              </Text>
-              <View style={styles["signatureName"]}>
-                <Text style={styles["signatureNameLabel"]}>NOMBRE:</Text>
-                <Text style={styles["signatureNameValue"]}>
-                  {signaturesAuthorizerPermission[0]?.name}
+            {signaturesExecutorsPermission.map((executor, index) => (
+              <View style={styles["tableRow"]} key={index}>
+                <Text
+                  style={[
+                    styles["executorsTableCell"],
+                    { width: "35%", textAlign: "center" },
+                  ]}
+                >
+                  {executor.name}
                 </Text>
-              </View>
-              <View style={styles["signatureName"]}>
-                <Text style={styles["signatureNameLabel"]}>C.C. N°:</Text>
-                <Text style={styles["signatureNameValue"]}>
-                  {signaturesAuthorizerPermission[0]?.identification}
+                <Text
+                  style={[
+                    styles["executorsTableCell"],
+                    { width: "35%", textAlign: "center" },
+                  ]}
+                >
+                  {executor.identification}
                 </Text>
-              </View>
-              <View style={styles["signatureName"]}>
-                <Text style={styles["signatureNameLabel"]}>FIRMA:</Text>
-                <View style={styles["signatureImageContainer"]}>
+                <View
+                  style={[styles["executorsSignatureCell"], { width: "30%" }]}
+                >
                   <Image
-                    src={signaturesAuthorizerPermission[0]?.signature}
-                    style={styles["signatureImage"]}
+                    src={executor.signature}
+                    style={styles["executorsSignatureImage"]}
                   />
                 </View>
               </View>
-            </View>
-
-            <View style={styles["signatureBox"]}>
-              <Text style={styles["signatureHeader"]}>
-                DATOS DEL COORDINADOR DE ALTURAS
-              </Text>
-              <Text style={styles["signatureText"]}>
-                He verificado las listas de chequeo que avalan este permiso y el
-                alcance de los riesgos del trabajo en alturas y supervisaré que
-                todas las medidas de seguridad sean implementadas para realizar
-                un trabajo seguro en altura
-              </Text>
-              <View style={styles["signatureName"]}>
-                <Text style={styles["signatureNameLabel"]}>NOMBRE:</Text>
-                <Text style={styles["signatureNameValue"]}>
-                  {signaturesCoordinatorPermission[0]?.name}
+            ))}
+          </View>
+          {/* Aprobación y Refrendación del Permiso */}
+          <View style={styles["signaturesContainer"]}>
+            <View style={styles["signaturesGrid"]}>
+              <View style={styles["signatureBox"]}>
+                <Text style={styles["signatureHeader"]}>
+                  DATOS DEL AUTORIZANTE
                 </Text>
-              </View>
-              <View style={styles["signatureName"]}>
-                <Text style={styles["signatureNameLabel"]}>C.C. N°:</Text>
-                <Text style={styles["signatureNameValue"]}>
-                  {signaturesCoordinatorPermission[0]?.identification}
+                <Text style={styles["signatureText"]}>
+                  He verificado las condiciones de seguridad y doy aprobación
+                  para ejecutar el trabajo seguro en alturas
                 </Text>
+                <View style={styles["signatureName"]}>
+                  <Text style={styles["signatureNameLabel"]}>NOMBRE:</Text>
+                  <Text style={styles["signatureNameValue"]}>
+                    {signaturesAuthorizerPermission[0]?.name}
+                  </Text>
+                </View>
+                <View style={styles["signatureName"]}>
+                  <Text style={styles["signatureNameLabel"]}>C.C. N°:</Text>
+                  <Text style={styles["signatureNameValue"]}>
+                    {signaturesAuthorizerPermission[0]?.identification}
+                  </Text>
+                </View>
+                <View style={styles["signatureName"]}>
+                  <Text style={styles["signatureNameLabel"]}>FIRMA:</Text>
+                  <View style={styles["signatureImageContainer"]}>
+                    <Image
+                      src={signaturesAuthorizerPermission[0]?.signature}
+                      style={styles["signatureImage"]}
+                    />
+                  </View>
+                </View>
               </View>
-              <View style={styles["signatureName"]}>
-                <Text style={styles["signatureNameLabel"]}>FIRMA:</Text>
-                <View style={styles["signatureImageContainer"]}>
-                  <Image
-                    src={signaturesCoordinatorPermission[0]?.signature}
-                    style={styles["signatureImage"]}
-                  />
+              <View style={styles["signatureBox"]}>
+                <Text style={styles["signatureHeader"]}>
+                  DATOS DEL COORDINADOR DE ALTURAS
+                </Text>
+                <Text style={styles["signatureText"]}>
+                  He verificado las listas de chequeo que avalan este permiso y
+                  el alcance de los riesgos del trabajo en alturas y supervisaré
+                  que todas las medidas de seguridad sean implementadas para
+                  realizar un trabajo seguro en altura
+                </Text>
+                <View style={styles["signatureName"]}>
+                  <Text style={styles["signatureNameLabel"]}>NOMBRE:</Text>
+                  <Text style={styles["signatureNameValue"]}>
+                    {signaturesCoordinatorPermission[0]?.name}
+                  </Text>
+                </View>
+                <View style={styles["signatureName"]}>
+                  <Text style={styles["signatureNameLabel"]}>C.C. N°:</Text>
+                  <Text style={styles["signatureNameValue"]}>
+                    {signaturesCoordinatorPermission[0]?.identification}
+                  </Text>
+                </View>
+                <View style={styles["signatureName"]}>
+                  <Text style={styles["signatureNameLabel"]}>FIRMA:</Text>
+                  <View style={styles["signatureImageContainer"]}>
+                    <Image
+                      src={signaturesCoordinatorPermission[0]?.signature}
+                      style={styles["signatureImage"]}
+                    />
+                  </View>
                 </View>
               </View>
             </View>
           </View>
-        </View>
-      </Page>
+          {/* Finalización y Cierre del Permiso */}
+          <View style={styles["closingContainer"]}>
+            <Text style={styles["closingTitle"]}>
+              FINALIZACIÓN Y CIERRE DEL PERMISO TRABAJO EN ALTURAS
+            </Text>
+            <Text style={styles["closingText"]}>
+              Recibo el frente de trabajo y equipos en condiciones adecuadas de
+              orden, aseo y seguridad.
+            </Text>
+            <View style={styles["closingSignaturesContainer"]}>
+              <View style={styles["closingSignatureSection"]}>
+                <View style={styles["closingSignatureRow"]}>
+                  <Text style={styles["closingSignatureLabel"]}>
+                    Firma del Autorizante:
+                  </Text>
+                  <View style={styles["closingSignatureImageContainer"]}>
+                    <Image
+                      src={signaturesAuthorizerPermission[0].signature}
+                      style={styles["closingSignatureImage"]}
+                    />
+                  </View>
+                </View>
+                <View style={styles["closingSignatureRow"]}>
+                  <Text style={styles["closingSignatureLabel"]}>CC Nº:</Text>
+                  <Text style={styles["closingSignatureValue"]}>
+                    {signaturesAuthorizerPermission[0].identification}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles["closingSignatureSection"]}>
+                <View style={styles["closingSignatureRow"]}>
+                  <Text style={styles["closingSignatureLabel"]}>
+                    Firma del Coordinador:
+                  </Text>
+                  <View style={styles["closingSignatureImageContainer"]}>
+                    <Image
+                      src={signaturesCoordinatorPermission[0].signature}
+                      style={styles["closingSignatureImage"]}
+                    />
+                  </View>
+                </View>
+                <View style={styles["closingSignatureRow"]}>
+                  <Text
+                    style={[
+                      styles["closingSignatureLabel"],
+                      { textAlign: "right" },
+                    ]}
+                  >
+                    CC Nº:
+                  </Text>
+                  <Text style={styles["closingSignatureValue"]}>
+                    {signaturesCoordinatorPermission[0].identification}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Page>
+      )}
+      {signaturesExecutorsPermission.length > 2 && (
+        <>
+          <Page style={styles["page"]}>
+            {/* Checklist */}
+            <View style={[styles["table"], { marginBottom: 5 }]}>
+              <Text style={styles["tableHeader"]}>
+                LISTA DE CHEQUEO PARA PERMISO DE TRABAJO EN ALTURAS
+              </Text>
+              <View style={styles["tableRowHeader"]}>
+                <Text style={[styles["tableHeaderCell"], { width: "45%" }]}>
+                  VERIFICACION IMPLEMENTACION
+                </Text>
+                <Text
+                  style={[styles["tableHeaderCellAspect"], { width: "45%" }]}
+                >
+                  ASPECTO A TENER EN CUENTA
+                </Text>
+                <Text style={[styles["tableHeaderCell"], { width: "6%" }]}>
+                  SI
+                </Text>
+                <Text
+                  style={[
+                    styles["tableHeaderCellIntermediateNo"],
+                    { width: "6%" },
+                  ]}
+                >
+                  NO
+                </Text>
+                <Text style={[styles["tableHeaderCell"], { width: "6%" }]}>
+                  N/A
+                </Text>
+              </View>
+              {itemsCheckWithAnswers.map(renderChecklistRow)}
+            </View>
+            {/* Datos del Ejecutor y/o Ejecutores */}
+            <Text style={styles["executorsTitle"]}>
+              DATOS DEL EJECUTOR Y/O EJECUTORES
+            </Text>
+            <Text style={styles["executorsText"]}>
+              He entendido claramente el alcance y riesgos del trabajo y lo
+              realizaré con todas las medidas de seguridad para realizar un
+              trabajo seguro en altura. Manifiesto que estoy en óptimas
+              condiciones de salud para desempeñar el trabajo en alturas.
+            </Text>
+            <View style={styles["executorsTable"]}>
+              <View style={styles["tableRow"]}>
+                <Text
+                  style={[styles["executorsTableHeaderCell"], { width: "35%" }]}
+                >
+                  NOMBRE
+                </Text>
+                <Text
+                  style={[styles["executorsTableHeaderCell"], { width: "35%" }]}
+                >
+                  C.C. N°
+                </Text>
+                <Text
+                  style={[styles["executorsTableHeaderCell"], { width: "30%" }]}
+                >
+                  FIRMA
+                </Text>
+              </View>
+              {signaturesExecutorsPermission.map((executor, index) => (
+                <View style={styles["tableRow"]} key={index}>
+                  <Text
+                    style={[
+                      styles["executorsTableCell"],
+                      { width: "35%", textAlign: "center" },
+                    ]}
+                  >
+                    {executor.name}
+                  </Text>
+                  <Text
+                    style={[
+                      styles["executorsTableCell"],
+                      { width: "35%", textAlign: "center" },
+                    ]}
+                  >
+                    {executor.identification}
+                  </Text>
+                  <View
+                    style={[styles["executorsSignatureCell"], { width: "30%" }]}
+                  >
+                    <Image
+                      src={executor.signature}
+                      style={styles["executorsSignatureImage"]}
+                    />
+                  </View>
+                </View>
+              ))}
+            </View>
+            {/* Aprobación y Refrendación del Permiso */}
+            <View style={styles["signaturesContainer"]}>
+              <View style={styles["signaturesGrid"]}>
+                <View style={styles["signatureBox"]}>
+                  <Text style={styles["signatureHeader"]}>
+                    DATOS DEL AUTORIZANTE
+                  </Text>
+                  <Text style={styles["signatureText"]}>
+                    He verificado las condiciones de seguridad y doy aprobación
+                    para ejecutar el trabajo seguro en alturas
+                  </Text>
+                  <View style={styles["signatureName"]}>
+                    <Text style={styles["signatureNameLabel"]}>NOMBRE:</Text>
+                    <Text style={styles["signatureNameValue"]}>
+                      {signaturesAuthorizerPermission[0]?.name}
+                    </Text>
+                  </View>
+                  <View style={styles["signatureName"]}>
+                    <Text style={styles["signatureNameLabel"]}>C.C. N°:</Text>
+                    <Text style={styles["signatureNameValue"]}>
+                      {signaturesAuthorizerPermission[0]?.identification}
+                    </Text>
+                  </View>
+                  <View style={styles["signatureName"]}>
+                    <Text style={styles["signatureNameLabel"]}>FIRMA:</Text>
+                    <View style={styles["signatureImageContainer"]}>
+                      <Image
+                        src={signaturesAuthorizerPermission[0]?.signature}
+                        style={styles["signatureImage"]}
+                      />
+                    </View>
+                  </View>
+                </View>
+                <View style={styles["signatureBox"]}>
+                  <Text style={styles["signatureHeader"]}>
+                    DATOS DEL COORDINADOR DE ALTURAS
+                  </Text>
+                  <Text style={styles["signatureText"]}>
+                    He verificado las listas de chequeo que avalan este permiso
+                    y el alcance de los riesgos del trabajo en alturas y
+                    supervisaré que todas las medidas de seguridad sean
+                    implementadas para realizar un trabajo seguro en altura
+                  </Text>
+                  <View style={styles["signatureName"]}>
+                    <Text style={styles["signatureNameLabel"]}>NOMBRE:</Text>
+                    <Text style={styles["signatureNameValue"]}>
+                      {signaturesCoordinatorPermission[0]?.name}
+                    </Text>
+                  </View>
+                  <View style={styles["signatureName"]}>
+                    <Text style={styles["signatureNameLabel"]}>C.C. N°:</Text>
+                    <Text style={styles["signatureNameValue"]}>
+                      {signaturesCoordinatorPermission[0]?.identification}
+                    </Text>
+                  </View>
+                  <View style={styles["signatureName"]}>
+                    <Text style={styles["signatureNameLabel"]}>FIRMA:</Text>
+                    <View style={styles["signatureImageContainer"]}>
+                      <Image
+                        src={signaturesCoordinatorPermission[0]?.signature}
+                        style={styles["signatureImage"]}
+                      />
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </Page>
+          <Page style={styles["page"]}>
+            {/* Finalización y Cierre del Permiso */}
+            <View style={styles["closingContainer"]}>
+              <Text style={styles["closingTitle"]}>
+                FINALIZACIÓN Y CIERRE DEL PERMISO TRABAJO EN ALTURAS
+              </Text>
+              <Text style={styles["closingText"]}>
+                Recibo el frente de trabajo y equipos en condiciones adecuadas
+                de orden, aseo y seguridad.
+              </Text>
+              <View style={styles["closingSignaturesContainer"]}>
+                <View style={styles["closingSignatureSection"]}>
+                  <View style={styles["closingSignatureRow"]}>
+                    <Text style={styles["closingSignatureLabel"]}>
+                      Firma del Autorizante:
+                    </Text>
+                    <View style={styles["closingSignatureImageContainer"]}>
+                      <Image
+                        src={signaturesAuthorizerPermission[0].signature}
+                        style={styles["closingSignatureImage"]}
+                      />
+                    </View>
+                  </View>
+                  <View style={styles["closingSignatureRow"]}>
+                    <Text style={styles["closingSignatureLabel"]}>CC Nº:</Text>
+                    <Text style={styles["closingSignatureValue"]}>
+                      {signaturesAuthorizerPermission[0].identification}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles["closingSignatureSection"]}>
+                  <View style={styles["closingSignatureRow"]}>
+                    <Text style={styles["closingSignatureLabel"]}>
+                      Firma del Coordinador:
+                    </Text>
+                    <View style={styles["closingSignatureImageContainer"]}>
+                      <Image
+                        src={signaturesCoordinatorPermission[0].signature}
+                        style={styles["closingSignatureImage"]}
+                      />
+                    </View>
+                  </View>
+                  <View style={styles["closingSignatureRow"]}>
+                    <Text
+                      style={[
+                        styles["closingSignatureLabel"],
+                        { textAlign: "right" },
+                      ]}
+                    >
+                      CC Nº:
+                    </Text>
+                    <Text style={styles["closingSignatureValue"]}>
+                      {signaturesCoordinatorPermission[0].identification}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </Page>
+        </>
+      )}
     </Document>
   );
 };
 
-export { PendingPermissionPdfDocument };
+export { CompletedPermissionPdfDocument };

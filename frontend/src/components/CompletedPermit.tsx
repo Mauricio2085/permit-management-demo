@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import { useState } from "react";
 import { useFetch } from "@/hooks/useFetch";
-import { PermissionDownloadPdfButton } from "@/components/PermissionDownloadPdfButton";
+import { PermissionDownloadPdfButton } from "@/components/PermitDownloadPdfButton";
 import type { PermissionDownloadResponse } from "@/types/workAtHeights";
 import { Loading } from "@/components/Loading";
 import ErrorModal from "@/components/ErrorModal";

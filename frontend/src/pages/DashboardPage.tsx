@@ -16,8 +16,8 @@ import { useFetch } from "@/hooks/useFetch";
 import ErrorModal from "@/components/ErrorModal";
 import { useAuth } from "@/contexts/AuthContext";
 import SuccessModal from "@/components/PermitSuccessModal";
-import { EliminatePermissionModal } from "@/components/EliminatePermissionModal";
-import { ClosePermissionModal } from "@/components/ClosePermissionModal";
+import { EliminatePermissionModal } from "@/components/EliminatePermitModal";
+import { ClosePermissionModal } from "@/components/ClosePermitModal";
 import { URL_API } from "../../config/api";
 
 type SuccessTypes = "created" | "closed" | "deleted";

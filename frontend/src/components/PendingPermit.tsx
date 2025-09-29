@@ -4,7 +4,7 @@ import { useFetch } from "@/hooks/useFetch";
 import type { PermissionDownloadResponse } from "@/types/workAtHeights";
 import { Loading } from "@/components/Loading";
 import ErrorModal from "@/components/ErrorModal";
-import { PermissionDownloadPdfButton } from "@/components/PermissionDownloadPdfButton";
+import { PermissionDownloadPdfButton } from "@/components/PermitDownloadPdfButton";
 import { URL_API } from "../../config/api";
 
 type ResponseType = "SI" | "NO" | "NA";
