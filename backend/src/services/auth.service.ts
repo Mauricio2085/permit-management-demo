@@ -32,7 +32,7 @@ export const authenticateUser = async (
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      throw Boom.unauthorized("Incorrect credentials");
+      throw Boom.unauthorized("unauthorized user");
     }
 
     if (!config.jwtSecret) {
