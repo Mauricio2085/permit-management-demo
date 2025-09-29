@@ -42,6 +42,12 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "src/**/*.js", "types/**/*.d.ts", "test"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.js",
+    "types/**/*.d.ts",
+    "test",
+    "src/utils/createPermitTool.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

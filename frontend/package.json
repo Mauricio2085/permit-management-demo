@@ -8,7 +8,6 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "permit": "node --loader ts-node/esm src/lib/createPermitTool.ts",
     "test": "vitest",
     "test:coverage": "vitest run --coverage"
   },
