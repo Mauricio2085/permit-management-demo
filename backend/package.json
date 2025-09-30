@@ -10,7 +10,7 @@
     "dev": "NODE_ENV=development nodemon --watch src --ext ts --exec \"tsc && node dist/index.js\"",
     "hash": "node --loader ts-node/esm ./src/utils/hashPassword.ts",
     "permit": "node --loader ts-node/esm src/utils/createPermitTool.ts",
-    "test": ""
+    "test": "NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "keywords": [
     "nodejs",

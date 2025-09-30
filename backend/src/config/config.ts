@@ -14,6 +14,11 @@ if (env === "development") {
   dotEnv.config({ path: envPath });
 }
 
+if (env === "test") {
+  const envPath = path.resolve(__dirname, `../../.env.${env}.local`);
+  dotEnv.config({ path: envPath });
+}
+
 // Validaciones tempranas para asegurar que las variables existen
 if (!process.env.JWT_SECRET) {
   throw Boom.internal("JWT_SECRET environment variable is not defined.");
