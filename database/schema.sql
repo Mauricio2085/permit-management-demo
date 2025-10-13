@@ -17,7 +17,7 @@ CREATE TABLE users (
 );
 
 INSERT INTO users (name, email, password, role_id) 
-VALUES ('userAdmin', 'permit-demo@example.com', '$2b$10$kTDflZ/j15nCgG/j1tre3uLXSL9GffJd6jhO2mms7XKO4ttp0yvKG', 1);
+VALUES ('userAdmin', 'demo@example.com', '$2b$10$UMmPB1kz5TRfalhvTIuFYuMF09RtDWCEmAS/Rxb7TRePXfkBvxE/a', 1);
 
 -- Permits main table
 CREATE TABLE work_at_heights_permits (
