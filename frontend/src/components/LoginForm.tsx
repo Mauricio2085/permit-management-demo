@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { useAuth } from "../contexts/AuthContext";
 import { AxiosError } from "axios";
@@ -12,16 +12,38 @@ type Inputs = {
 };
 
 const LoginForm = () => {
+  const STORAGED_EMAIL = "remembered_email";
   const {
     register,
     handleSubmit,
+    setValue,
+    setFocus,
     formState: { errors, isSubmitting },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe: false,
+    },
+  });
 
   const { login } = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState<string>("");
+  const [remember, setRemember] = useState<boolean>(false);
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem(STORAGED_EMAIL);
+    if (savedEmail) {
+      setValue("email", savedEmail);
+      setValue("rememberMe", true);
+      setRemember(true);
+      setTimeout(() => setFocus("password"), 100);
+    } else {
+      setFocus("email");
+    }
+  }, [setValue, setFocus]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
@@ -29,6 +51,13 @@ const LoginForm = () => {
       console.log(data);
       await login(data);
       navigate("/admin");
+      if (data.rememberMe) {
+        localStorage.setItem(STORAGED_EMAIL, data.email);
+      } else {
+        localStorage.removeItem(STORAGED_EMAIL);
+        setRemember(false);
+      }
+      console.log("Local estorage: ", localStorage.getItem("remembered_email"));
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) {
@@ -120,11 +149,11 @@ const LoginForm = () => {
                 id="email"
                 type="email"
                 placeholder="tu.correo@compañía.com"
-                className={`w-full pl-10 pr-4 py-3 rounded-lg border shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${
+                className={`w-full pl-10 pr-4 py-3 rounded-lg border shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-300 ${
                   errors.email
                     ? "border-red-300 bg-red-50"
                     : "border-slate-300 bg-white hover:border-slate-400"
-                }`}
+                } ${remember ? "bg-green-200" : ""}`}
                 {...register("email", {
                   required: "El correo es obligatorio",
                   pattern: {
