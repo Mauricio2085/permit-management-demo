@@ -277,16 +277,6 @@ const LoginForm = () => {
                 Recordarme
               </label>
             </div>
-
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-orange-600 hover:text-orange-500 transition-colors"
-                onClick={(e) => e.preventDefault()}
-              >
-                Olvidó su contraseña?
-              </a>
-            </div>
           </div>
 
           {/* Botón de acceso */}
